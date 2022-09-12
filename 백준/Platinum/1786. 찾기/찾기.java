@@ -22,6 +22,7 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringBuilder sb = new StringBuilder();
         char[] T = br.readLine().toCharArray();
         char[] P = br.readLine().toCharArray();
         int[] pi = getPrefix(P);
@@ -43,10 +44,11 @@ public class Main {
                 }
             }
         }
-        System.out.println(cnt);
+        sb.append(cnt).append("\n");
         for (int n : result) {
-            System.out.print(n + " ");
+            sb.append(n + " ");
         }
+        System.out.println(sb);
 
     }
 }
