@@ -5,14 +5,14 @@ import java.util.List;
 
 public class Main {
 
-    static int[] getPrefix(String str) {
-        int[] pi = new int[str.length()];
+    static int[] getPrefix(char[] str) {
+        int[] pi = new int[str.length];
         int j = 0;
         for (int i = 1; i < pi.length; i++) {
-            while (j > 0 && str.charAt(i) != str.charAt(j)) {
+            while (j > 0 && str[i] != str[j]) {
                 j = pi[j - 1];
             }
-            if (str.charAt(j) == str.charAt(i)) {
+            if (str[j] == str[i]) {
                 j++;
             }
             pi[i] = j;
@@ -22,21 +22,21 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String T = br.readLine();
-        String P = br.readLine();
+        char[] T = br.readLine().toCharArray();
+        char[] P = br.readLine().toCharArray();
         int[] pi = getPrefix(P);
 
         int j = 0;
         int cnt = 0;
         List<Integer> result = new ArrayList<>();
-        for (int i = 0; i < T.length(); i++) {
-            while (j > 0 && P.charAt(j) != T.charAt(i)) {
+        for (int i = 0; i < T.length; i++) {
+            while (j > 0 && P[j] != T[i]) {
                 j = pi[j - 1];
             }
-            if (T.charAt(i) == P.charAt(j)) {
-                if (j == P.length() - 1) {
+            if (T[i] == P[j]) {
+                if (j == P.length - 1) {
                     cnt++;
-                    result.add(i - P.length() + 2);
+                    result.add(i - P.length + 2);
                     j = pi[j];
                 } else {
                     j++;
