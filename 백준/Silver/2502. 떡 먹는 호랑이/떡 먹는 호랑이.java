@@ -1,35 +1,40 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Main {
-
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
         int D = Integer.parseInt(st.nextToken());
         int K = Integer.parseInt(st.nextToken());
-        int[] dp = new int[D];
-        int a = 0;
-        int b = 0;
-        point:
-        for (int i = 1; i <= 100_000; i++) {
-            for (int j = 1; j < i; j++) {
-                dp[0] = j;
-                dp[1] = i;
-                for (int k = 2; k < D; k++) {
-                    dp[k] = dp[k - 2] + dp[k - 1];
+        int ansA = 0;
+        int ansB = 0;
+        int[] A = new int[D + 1];
+        int[] B = new int[D + 1];
+        A[1] = 1;
+        B[2] = 1;
+
+        for (int i = 3; i <= D; i++) {
+            A[i] = A[i - 1] + A[i - 2];
+            B[i] = B[i - 1] + B[i - 2];
+        }
+
+        for (int i = 1; i <= 100000; i++) {
+            int remain = K - A[D] * i;
+            if (remain % B[D] == 0) {
+                int b = remain / B[D];
+                if (b < i) {
+                    continue;
                 }
-                if (dp[D - 1] == K) {
-                    a = j;
-                    b = i;
-                    break point;
-                } else if (dp[D - 1] > K) {
-                    break;
-                }
+                ansA = i;
+                ansB = b;
+                break;
+
             }
         }
-        System.out.println(a);
-        System.out.println(b);
+        System.out.println(ansA);
+        System.out.println(ansB);
     }
 }
