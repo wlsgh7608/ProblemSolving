@@ -3,17 +3,18 @@ class Solution {
         // nums 길이 1000
         // O(logN)
         // 양옆보다 큰 index 찾기
-        
-        // O(N)
         int N = nums.length;
 
+        // element가 1개인 경우
         if(N==1){
             return 0;
         }
+        
+        // 맨 왼쪽이 봉우리인 경우
         if(nums[0]>nums[1]){
             return 0;
         }
-        
+        // 맨 오른쪽이 봉우리인 경우 
         if( nums[N-1]>nums[N-2]){
             return N-1;
         }
@@ -36,7 +37,6 @@ class Solution {
             }
             
         }
-        
         return answer;
     }
 }
