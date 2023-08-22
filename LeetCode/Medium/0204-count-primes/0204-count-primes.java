@@ -7,7 +7,7 @@ class Solution {
         
         // 에라토스체네스의 해
         // 소수가 아닌 것 false로 변경
-        for(int i = 2; i <=n;i++){
+        for(int i = 2; i*i <=n;i++){
             for(int j =2;i*j<=n;j++){
                 int num = i*j;
                 isPrime[num] = false;
