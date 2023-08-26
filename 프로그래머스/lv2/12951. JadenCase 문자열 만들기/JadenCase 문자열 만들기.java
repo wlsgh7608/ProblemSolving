@@ -2,10 +2,7 @@ import java.util.*;
 
 class Solution {
     public String solution(String s) {
-        String answer = "";
-        StringTokenizer st = new StringTokenizer(s);
         StringBuilder sb = new StringBuilder();
-        
         boolean isFirst = true;
         int len = s.length();
         
