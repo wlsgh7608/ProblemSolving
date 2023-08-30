@@ -1,22 +1,17 @@
 class Solution {
     public int singleNumber(int[] nums) {
-        HashSet<Integer> hs = new HashSet<>();
-        HashSet<Integer> dupN = new HashSet<>();
+        int once = 0;
+        int twice = 0;
+        int thrice = 0;
+        
         for(int n : nums){
-            if(dupN.contains(n)){
-                continue;
-            }
-            if(hs.contains(n)){
-                hs.remove(n);
-                dupN.add(n);
-            }else{
-                hs.add(n);
-            }
+            twice = twice | ( once & n);
+            once = once ^ n;
+            thrice = once & twice;
+            once = once & (~thrice);
+            twice = twice & (~thrice);    
         }
-        int answer = -1;
-        for(int n: hs){
-            answer = n;
-        }
-        return answer;
+        
+        return once;
     }
 }
