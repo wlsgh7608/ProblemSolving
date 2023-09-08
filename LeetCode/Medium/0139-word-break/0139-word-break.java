@@ -3,14 +3,18 @@ class Solution {
     
     public boolean wordBreak(String s, List<String> wordDict) {
         
-        HashSet<String> answer = new HashSet<>();
         HashSet<String> hs = new HashSet<>();
         
         for(String word : wordDict){
             hs.add(word);
-            if(word.length()==s.length()){
-                answer.add(word);
+            if(s.equals(word)){
+                return true;
             }
+        }
+        
+        String[] sArr = new String[s.length()];
+        for(int i = 1; i<s.length();i++){
+            sArr[i] = s.substring(0,i);
         }
         
         while(hs.size()!=0){
@@ -21,23 +25,24 @@ class Solution {
                     String word2 = str+word;
                     int size = word1.length();
                     if(size<s.length()){
-                        if(s.substring(0,size).equals(word1)){
+                        if(sArr[size].equals(word1)){
                             newHs.add(word1);
-                        }else if(s.substring(0,size).equals(word2)){
+                        }else if(sArr[size].equals(word2)){
                             newHs.add(word2);
                         }
                     }else if(size==s.length()){
-                        answer.add(word1);
-                        answer.add(word2);
+                        if(s.equals(word1)){
+                            return true;
+                        }
+                        if(s.equals(word2)){
+                            return true;
+                        }
+                        
                     }
                 }
             } 
             hs = newHs;
         }
-        if(answer.contains(s)){
-            return true;
-        }else{
-            return false;
-        }
+        return false;
     }
 }
