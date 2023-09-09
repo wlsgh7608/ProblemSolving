@@ -1,42 +1,48 @@
 class Solution {
     
     
-    public boolean wordBreak(String s, List<String> wordDict) {
+    static boolean dfs( String str ,int idx, List<String> wordDict){
+        if(idx==N){
+            return true;
+        }
         
-        HashSet<String> hs = new HashSet<>();
+        if(dp[idx]){
+            return true;
+        }
         
         for(String word : wordDict){
-            hs.add(word);
-            if(s.equals(word)){
-                return true;
-            }
-        }
-        
-        String[] sArr = new String[s.length()];
-        for(int i = 1; i<s.length();i++){
-            sArr[i] = s.substring(0,i);
-        }
-        
-        while(hs.size()!=0){
-            HashSet<String> newHs = new HashSet<>();
-            for(String word: wordDict){
-                for(String str : hs){
-                    String word1 = str+word;
-                    int size = word1.length();
-                    if(size<s.length()){
-                        if(sArr[size].equals(word1)){
-                            newHs.add(word1);
-                        }
-                    }else if(size==s.length()){
-                        if(s.equals(word1)){
-                            return true;
-                        }
-                        
-                    }
+            String newStr = str+word;
+
+            if(answer.startsWith(newStr)){
+                
+
+                int newIdx = idx+word.length();
+                if(newIdx<=N){
+                    dfs(newStr,newIdx,wordDict);
+                    
+                    dp[newIdx] = true;
                 }
-            } 
-            hs = newHs;
+            }
+            
         }
         return false;
+        
+    }
+    
+    static boolean[] dp ;
+    static String answer;
+    static int N ;
+    public boolean wordBreak(String s, List<String> wordDict) {
+        
+        N = s.length();
+        dp = new boolean[N+1];
+        answer = s;
+        dfs("",0,wordDict);
+        System.out.println(Arrays.toString(dp));
+        if(dp[N]){
+            return true;
+        }else{
+            return false;
+        }
     }
 }
