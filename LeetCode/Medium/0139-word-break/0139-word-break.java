@@ -21,20 +21,14 @@ class Solution {
             HashSet<String> newHs = new HashSet<>();
             for(String word: wordDict){
                 for(String str : hs){
-                    String word1 = word+str;
-                    String word2 = str+word;
+                    String word1 = str+word;
                     int size = word1.length();
                     if(size<s.length()){
                         if(sArr[size].equals(word1)){
                             newHs.add(word1);
-                        }else if(sArr[size].equals(word2)){
-                            newHs.add(word2);
                         }
                     }else if(size==s.length()){
                         if(s.equals(word1)){
-                            return true;
-                        }
-                        if(s.equals(word2)){
                             return true;
                         }
                         
