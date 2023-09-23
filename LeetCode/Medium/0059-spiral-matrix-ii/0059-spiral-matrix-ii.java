@@ -2,8 +2,13 @@ class Solution {
     
     
     static void move(int x,int y, int d,int cnt){
+        
         visited[x][y] = true;
         G[x][y] = cnt;
+        
+        if(cnt == N*N){
+            isSuccess = true;
+        }
         
         for(int i = 0 ; i<4;i++){
             int nd = (d+i)%4;
@@ -16,7 +21,9 @@ class Solution {
 
             
             move(nx,ny,nd,cnt+1);
-            
+            if(isSuccess){
+                return;
+            }
             
         }
         
@@ -29,6 +36,7 @@ class Solution {
     
     static int[][] G;
     static boolean[][] visited;
+    static boolean isSuccess;
     
     
     public int[][] generateMatrix(int n) {
