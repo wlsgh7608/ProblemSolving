@@ -6,18 +6,15 @@ class Solution {
         int p = 0;
         for(int i = 0; i < nums.length;i++){
             int n = nums[i];
+            
             if(prev!=n){
                 prev = n;
                 nums[p++] = n;
                 isSame = false;
-            }else if(prev==n){
-                if(!isSame){
+            }else if(!isSame){
                     nums[p++] = n;
                 
                     isSame = true;
-                }else{
-                    continue;
-                }
             }
         }
         return p;
