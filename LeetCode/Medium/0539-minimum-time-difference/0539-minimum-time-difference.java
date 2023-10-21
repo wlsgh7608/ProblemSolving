@@ -31,26 +31,30 @@ class Solution {
     
     
     public int findMinDifference(List<String> timePoints) {
-        List<Time> times = new ArrayList<>();
+        
+        int N  = timePoints.size();
+        Time[] times = new Time[N];
+        
+        int p = 0;
         for(String time : timePoints){
             StringTokenizer st = new StringTokenizer(time,":");
             int h = Integer.parseInt(st.nextToken());
             int m = Integer.parseInt(st.nextToken());
     
-            times.add(new Time(h,m));
+            times[p++] = new Time(h,m);
+            
         }
-        Collections.sort(times);
-        
-        Time first = times.get(0);
-        times.add(new Time(first.h+24,first.m));
-        
+        Arrays.sort(times);
         int minDiff = 24*60;
-        for(int i=1;i<times.size();i++){
-            Time left = times.get(i-1);
-            Time right = times.get(i);
+        for(int i=1;i<N;i++){
+            Time left = times[i-1];
+            Time right = times[i];
             int diff = Time.diff(left,right);
             minDiff = Math.min(minDiff,diff);
         }
+        Time firstPlus24 = new Time(times[0].h+24, times[0].m);
+        minDiff = Math.min(minDiff,Time.diff(firstPlus24,times[N-1]));
+        
         
         
         return minDiff;
