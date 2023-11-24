@@ -2,7 +2,7 @@ class Solution {
     static boolean isPossible(int[] stones,int m,int k){
         int cnt = 0;
         for(int i = 0; i< stones.length;i++){
-            if(stones[i]-m<=0){
+            if(stones[i]-m<0){
                 cnt++;
                 if(cnt>=k){
                     return true;
@@ -31,6 +31,6 @@ class Solution {
             
         }
         
-        return lo;
+        return lo-1;
     }
 }
