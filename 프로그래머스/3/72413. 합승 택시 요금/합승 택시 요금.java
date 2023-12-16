@@ -1,6 +1,72 @@
 import java.util.*;
 class Solution {
-    public int solution(int n, int s, int a, int b, int[][] fares) {
+    
+    
+    static class Node implements Comparable<Node>{
+        int v;
+        int cost;
+        
+        public Node(int v, int cost){
+            this.v =v;
+            this.cost = cost;
+        }
+        
+        public int compareTo(Node o){
+            return this.cost - o.cost;
+        }
+    }
+    
+    private int[] getDist(int n,int s,List<Node>[] adjList){
+        int[] dist = new int[n+1];
+        Arrays.fill(dist,200_000_000);
+        dist[s] = 0;
+        Queue<Node> Q = new ArrayDeque<>();
+        Q.add(new Node(s,0));
+        while(!Q.isEmpty()){
+            Node cur = Q.poll();
+            int v = cur.v;
+            int cost = cur.cost;
+            
+            for(Node next: adjList[v]){
+                if(cost+next.cost < dist[next.v]){
+                    dist[next.v] = cost+next.cost;
+                    Q.add(new Node(next.v,dist[next.v]));
+                }
+            }
+        }
+        return dist;
+        
+    }
+    
+    
+    public int solution(int n, int s, int a, int b, int[][] fares){
+        List<Node>[] adjList = new List[n+1];
+        for(int i = 1; i <=n;i++){
+            adjList[i] = new ArrayList<Node>();
+        }
+        for(int[] fare :fares){
+            int v1 = fare[0];
+            int v2 = fare[1];
+            int cost = fare[2];
+            adjList[v1].add(new Node(v2,cost));
+            adjList[v2].add(new Node(v1,cost));
+        }
+        
+        int[] sDist = getDist(n,s,adjList);
+        int[] aDist = getDist(n,a,adjList);
+        int[] bDist = getDist(n,b,adjList);
+        
+        int minCost  = 200_000_000 +200_000_000;
+        for(int i = 1; i<= n;i++){
+            int cost = sDist[i] + aDist[i] + bDist[i];
+            minCost = Math.min(minCost,cost);
+        }
+        
+        return minCost;
+    }
+    
+    
+    public int solution2(int n, int s, int a, int b, int[][] fares) {
         // s -> m
         // m -> a
         // m -> b 경로 계산
