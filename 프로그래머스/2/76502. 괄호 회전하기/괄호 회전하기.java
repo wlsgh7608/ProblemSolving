@@ -3,8 +3,6 @@ class Solution {
         // 길이 1000
         // 회전 1000
         
-        
-        
         int size = s.length();
         int cnt = 0;
         
