@@ -3,34 +3,32 @@ import java.util.HashSet;
 import java.util.List;
 
 class Solution {
+    
+    
+    void dfs(int left,int right,int n, String str,List<String> result){
+        if(left == n && right == n){
+            result.add(str);
+            return;
+        }
+        if(left < n){
+            dfs(left+1,right,n,str+"(",result);
+        }
+        if(right < left){
+            dfs(left,right+1,n,str+")",result);
+        }
+    }
+    
     public List<String> generateParenthesis(int n) {
-
         // n개의 괄호 리스트 출력하기
 
         // 1 : ()
         // 2 : ()(), (())
-        // 3 : ((())), ()
+        // 3 : ((())), (()()), (())(), ()(()), ()()()
 
-        HashSet<String>[] parenthesis = new HashSet[n+1];
-        for (int i = 0; i <= n; i++) {
-            parenthesis[i] = new HashSet<>();
-        }
-        parenthesis[1].add("()");
-        for (int i = 2; i <= n; i++) {
-            for (int j = 1; j < i; j++) {
-                for (String a : parenthesis[j]) {
-                    for (String b : parenthesis[i - j]) {
-                        parenthesis[i].add(a + b);
-                    }
-                }
-            }
-            for(String a : parenthesis[i-1]){
-                parenthesis[i].add("("+a+")");
-            }
+        List<String> result = new ArrayList<>();
+        dfs(0,0,n,"",result);
 
-        }
-
-        return new ArrayList<>(parenthesis[n]);
+        return result;
 
     }
 }
