@@ -11,12 +11,12 @@ class Solution {
         // 2 : ()(), (())
         // 3 : ((())), ()
 
-        HashSet<String>[] parenthesis = new HashSet[9];
-        for (int i = 0; i <= 8; i++) {
+        HashSet<String>[] parenthesis = new HashSet[n+1];
+        for (int i = 0; i <= n; i++) {
             parenthesis[i] = new HashSet<>();
         }
         parenthesis[1].add("()");
-        for (int i = 2; i <= 8; i++) {
+        for (int i = 2; i <= n; i++) {
             for (int j = 1; j < i; j++) {
                 for (String a : parenthesis[j]) {
                     for (String b : parenthesis[i - j]) {
