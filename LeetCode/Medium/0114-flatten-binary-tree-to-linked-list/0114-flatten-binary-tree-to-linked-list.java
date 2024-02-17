@@ -1,27 +1,26 @@
-
 class Solution {
-
-    void preOrder(TreeNode cur, Stack<TreeNode> S) {
-        if (cur == null) {
+    void preOrder(TreeNode cur,List<TreeNode> list){
+        if(cur==null){
             return;
         }
-        S.add(cur);
-        preOrder(cur.left, S);
-        preOrder(cur.right, S);
-
+        list.add(cur);
+        preOrder(cur.left,list);
+        preOrder(cur.right,list);
+        
     }
-
-    private TreeNode prev = null;
-
     public void flatten(TreeNode root) {
-        if(root == null){
-            return;
+        List<TreeNode> list= new ArrayList<>();
+        preOrder(root,list);
+        
+        TreeNode prev = null;
+        for(TreeNode cur : list){
+            cur.left = null;
+            cur.right = null;
+            if(prev!=null){
+                prev.right = cur;       
+            }
+            prev = cur;
         }
-        flatten(root.right);
-        flatten(root.left);
-        root.right = prev;
-        root.left = null;
-        prev = root;
-
+        
     }
 }
