@@ -34,12 +34,12 @@ public class Main {
                 minDiff = diff;
             }
         }
-        if (idx == paints.length) {
-            return;
+
+
+        for(int i = idx;i< paints.length;i++){
+            Paint cur = paints[i];
+            dfs(i + 1, cnt + 1, r + cur.r, g + cur.g, b + cur.b, paints);
         }
-        Paint cur = paints[idx];
-        dfs(idx + 1, cnt + 1, r + cur.r, g + cur.g, b + cur.b, paints);
-        dfs(idx + 1, cnt, r, g, b, paints);
     }
 
     public static void main(String[] args) throws Exception {
