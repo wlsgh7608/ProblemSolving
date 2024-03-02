@@ -22,7 +22,7 @@ class Solution {
 
 
         List<Integer> lostList = new ArrayList<>(lostSet);
-        Collections.sort(lostList);
+        // Collections.sort(lostList);
         for(int l : lostList){
             // 왼쪽 학생 확인
             if (reserveSet.contains(l - 1)) {
