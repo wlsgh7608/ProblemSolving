@@ -1,53 +1,71 @@
 import java.util.*;
-
 class Solution {
+    class Bridge implements Comparable<Bridge> {
+        int v1;
+        int v2;
+        int cost;
 
-    //정점 v의 부모 찾기
-    private int getParent(int v) {
+        public Bridge(int v1, int v2, int cost) {
+            this.v1 = v1;
+            this.v2 = v2;
+            this.cost = cost;
+        }
+
+        @Override
+        public int compareTo(Bridge o) {
+            return Integer.compare(this.cost, o.cost);
+        }
+    }
+
+
+    int[] parent;
+    List<Bridge> bridges = new ArrayList<>();
+
+    void init(int n, int[][] costs) {
+        parent = new int[n];
+        for (int i = 0; i < n; i++) {
+            parent[i] = i;
+        }
+
+        for (int[] cost : costs) {
+            bridges.add(new Bridge(cost[0], cost[1], cost[2]));
+        }
+    }
+
+    int getParent(int v) {
         if (parent[v] == v) {
             return v;
         }
         return parent[v] = getParent(parent[v]);
     }
 
-    // 정점 a,b을 연결
-    private void union(int a, int b) {
-        a = getParent(a);
-        b = getParent(b);
-
-        if (a < b) {
-            parent[b] = a;
-        } else {
-            parent[a] = b;
-        }
-    }
-
-    static int[] parent;
 
     public int solution(int n, int[][] costs) {
+        init(n, costs);
+
         int answer = 0;
-        parent = new int[n];
-        for (int i = 0; i < n; i++) {
-            parent[i] = i;
-        }
-
-        // 다리의 건설비용 오름차순 정렬
-        Arrays.sort(costs, (o1, o2) -> o1[2] - o2[2]);
-
-        int totalCost = 0;
-        for (int[] edge : costs) {
-            int v1 = edge[0];
-            int v2 = edge[1];
-            int cost = edge[2];
-            // 부모가 같지 않다면
-            if (getParent(v1) != getParent(v2)) {
-                //둘이 연결
-                union(v1, v2);
-                totalCost += cost;
+        int edgeCnt = 0;
+        Collections.sort(bridges);
+        for (Bridge bridge : bridges) {
+            if (edgeCnt == n - 1) {
+                break;
             }
 
-        }
-        return totalCost;
+            int v1 = bridge.v1;
+            int v2 = bridge.v2;
+            int cost = bridge.cost;
 
+            int v1Parent = getParent(v1);
+            int v2Parent = getParent(v2);
+
+            if (v1Parent != v2Parent) {
+                parent[v1Parent] = v2Parent;
+
+                answer += cost;
+                edgeCnt++;
+            }
+        }
+        return answer;
     }
+
 }
