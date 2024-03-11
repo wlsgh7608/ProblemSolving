@@ -7,17 +7,17 @@ public class Main {
     static int[][] dp;
     static int[] balls;
 
-    static int recur(int k1, int k2, int turn) {
+    static int recur(int k1, int k2) {
         if (dp[k1][k2] != -1) {
             return dp[k1][k2];
         }
 
 
         for (int ball : balls) {
-            if (k1 - ball >= 0 && recur(k1 - ball, k2, turn ^ 1) == 0) {
+            if (k1 - ball >= 0 && recur(k1 - ball, k2) == 0) {
                 return dp[k1][k2] = 1;
             }
-            if (k2 - ball >= 0 && recur(k1, k2 - ball, turn ^ 1) == 0){
+            if (k2 - ball >= 0 && recur(k1, k2 - ball) == 0){
                 return dp[k1][k2] = 1;
             }
         }
@@ -47,7 +47,7 @@ public class Main {
             st = new StringTokenizer(br.readLine());
             int k1 = Integer.parseInt(st.nextToken());
             int k2 = Integer.parseInt(st.nextToken());
-            int result = recur(k1, k2, 0);
+            int result = recur(k1, k2);
             if(result==1){
                 sb.append("A").append("\n");
             }else{
