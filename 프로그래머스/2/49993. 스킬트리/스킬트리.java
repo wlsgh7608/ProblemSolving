@@ -1,9 +1,9 @@
 class Solution {
-    static final int ALPHABET = 26;
+    
     
     public int solution(String skill, String[] skill_trees) {
         int answer = 0;
-        int[] skillOrder = new int[ALPHABET];
+        int[] skillOrder = new int[26];
 
 
         // 스킬트리 순서를 저장
