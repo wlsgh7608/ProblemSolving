@@ -1,31 +1,47 @@
 import java.util.*;
-class Solution {
-    public int solution(int[][] targets) {
-        // 요격을 e위치를 기준으로 정렬
-        Comparator<int[]> TargetComparator = new Comparator<int[]>(){
-            @Override
-            public int compare(int[] o1,int[] o2){
-                // if(o1[1]==o2[1]){
-                //     return o1[0]-o2[0];
-                // }
-                return o1[1]-o2[1];
-            }
-        };
-        Arrays.sort(targets,TargetComparator);
-        
-        int end = -1;
-        int cnt = 0;
-        for(int[] target: targets){
-            int targetStart = target[0];
-            int targetEnd = target[1];
-        
-            if(targetStart>=end){
-                end = targetEnd;
-                cnt++;
-            }
-        
+class Target implements Comparable<Target> {
+        int start;
+        int end;
+
+        public Target(int start, int end) {
+            this.start = start;
+            this.end = end;
         }
-        
-        return cnt;
+
+        public int compareTo(Target o) {
+            if (this.end == o.end) {
+                return Integer.compare(this.start,o.start);
+            }
+            return Integer.compare(o.end,this.end);
+
+        }
     }
-}
+
+    class Solution {
+
+        PriorityQueue<Target> pq = new PriorityQueue<>();
+
+        public int solution(int[][] targets) {
+            int answer = 0;
+
+            for (int[] target : targets) {
+                pq.add(new Target(target[0], target[1]));
+            }
+
+            int s = pq.peek().start, e = pq.peek().end;
+
+            while(!pq.isEmpty()) {
+                Target target = pq.poll();
+
+                if (s >= target.end) {
+                    answer++;
+                    s = target.start;
+                }
+
+                s = Math.max(s, target.start);
+                e = Math.min(e, target.end);
+            }
+
+            return answer+1;
+        }
+    }
