@@ -28,25 +28,19 @@ public class Main {
         }
     }
 
-    static void dfs(int depth, int sum) {
+    static void dfs(int x, int y, int depth, int sum) {
 
-        //        System.out.println(depth+" "+sum);
         if (depth == K) {
             answer = Math.max(answer, sum);
             return;
         }
 
-//        for(boolean[] row: visited){
-//            System.out.println(Arrays.toString(row));
-//        }
 
-
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < M; j++) {
+        for (int i = x; i < N; i++) {
+            for (int j = (i == x ? y : 0); j < M; j++) {
                 if (visited[i][j] > 0) continue;
                 visitCheck(i, j, 1);
-
-                dfs(depth + 1, sum + G[i][j]);
+                dfs(i, j, depth + 1, sum + G[i][j]);
                 visitCheck(i, j, -1);
             }
         }
@@ -73,7 +67,7 @@ public class Main {
             }
         }
 
-        dfs(0, 0);
+        dfs(0, 0,0,0);
         System.out.println(answer);
 
 
