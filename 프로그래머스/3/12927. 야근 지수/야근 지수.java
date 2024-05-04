@@ -17,7 +17,6 @@ class Solution {
 
             if (diff == 0) {
                 n -= 1;
-
                 int remainWork = cur - 1;
                 if (remainWork > 0) {
                     PQ.add(cur - 1);
