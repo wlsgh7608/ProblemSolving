@@ -2,7 +2,6 @@ import java.util.*;
 class Solution {
     
     public int[] solution(int n, String[] words) {
-        int[] answer = {};
         
         HashSet<String> used = new HashSet<>();
         
@@ -17,18 +16,20 @@ class Solution {
             char start = word.charAt(0);
             char end = word.charAt(word.length()-1);
             
-            if(startChar != start){
+            // 끝말잇기를 할 수 없는 경우
+            if(startChar != start|| used.contains(word)){
                 return new int[]{turn,round};
             }
             
-            if(used.contains(word)){
-                return new int[]{turn, round};
-            }
+            // 이미 사용한 단어라면
+            // if(used.contains(word)){
+            //     return new int[]{turn, round};
+            // }
             
             startChar = end;
             used.add(word);
             
-            System.out.println(turn+" "+round);
+            // 마지막 사람이라면 round늘리고 다시 진행
             if(turn == n){
                 turn = 1;
                 round += 1;
@@ -38,7 +39,7 @@ class Solution {
             }
         }
         
-
+        // 탈락자가 생기지 않았다면
         return new int[]{0,0};
     }
 }
