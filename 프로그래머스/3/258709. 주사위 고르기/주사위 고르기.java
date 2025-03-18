@@ -1,129 +1,134 @@
-import java.util.Arrays;
-
+import java.util.*;
 class Solution {
-
-
     int N;
-    boolean[] selected; // A가 선택한 주사위
-
-    int sumIdx = 0;
-    int[] sumDice;
-
+    int[] A;
+    int[] B; 
+    
     int maxWinCnt;
-    int[] winDice;
-
-
-    void init(int[][] dice) {
-        N = dice.length;
-        selected = new boolean[N];
-
-        maxWinCnt = 0;
-        winDice = new int[N / 2];
-    }
-
-    int[] getDice(boolean isA) {
-        int size = N / 2;
-        int[] dice = new int[size];
-
-        int idx = 0;
-
-        for(int i= 0 ; i<N;i++){
-            if(selected[i]== isA){
-                dice[idx++] = i;
-            }
-        }
-
-        return dice;
-    }
-
-
-    void findSumValue(int depth, int sum, int[][] dice,int[] selectDice) {
-        if (depth == N / 2) {
-            sumDice[sumIdx++] = sum;
+    int[] answer;
+    int[][] dices;
+    
+    void diceRoll(int depth, int sum,int[] myDice, List<Integer> sumList){
+        if(depth == N/2){            
+            sumList.add(sum);
             return;
         }
-
-        for(int i = 0 ;i <6;i++){
-            int diceValue = dice[selectDice[depth]][i];
-            findSumValue(depth+1,sum+diceValue,dice,selectDice);
+        
+        for(int i= 0 ; i< 6; i++){
+            int diceIdx = myDice[depth];
+            int[] dice = dices[diceIdx];
+            diceRoll(depth+1,sum+dice[i],myDice,sumList);
         }
-
+        
     }
-    int[] getRoll(int[][] dice, int[] selectDice){
-        sumIdx= 0 ;
-        // N/2의 주사위 돌려서 나오는 경우 6^(N/2)
-        int size = (int) Math.pow(6, (N / 2));
-        sumDice = new int[size];
-        findSumValue(0, 0, dice, selectDice);
-        return sumDice;
-    }
-
-    int rollDice(int[] diceA, int[] diceB,int[][] dice) {
-        // A가 N/2의 주사위를 돌린다.
-        // B도 N/2의 주사위를 돌린다.
-
-        int[] sumDiceA = getRoll( dice, diceA);
-        int[] sumDiceB = getRoll( dice, diceB);
-
-        Arrays.sort(sumDiceA);
-        Arrays.sort(sumDiceB);
-
-        // 각각의 경우에서 A가 이기는 경우 확인
-
-        int cnt = 0;
-        for(int sumA : sumDiceA){
-            cnt+= getWinCnt(sumA, sumDiceB);
-        }
-        return cnt;
-    }
-
-    private int getWinCnt(int target, int[] arr) {
+    
+    int getWinCnt(List<Integer> list, int target){
         int lo = 0;
-        int hi = arr.length - 1;
-
+        int hi = list.size()-1;
+        
         while(lo<=hi){
-
             int m = (lo+hi)/2;
-
-            if(arr[m] < target){
+            if(list.get(m)< target){
                 lo = m+1;
             }else{
                 hi = m-1;
             }
         }
+        // System.out.println("Target : "+target+" cnt : "+lo);
+        
         return lo;
     }
+    
+    
+    
+    List<Integer> getDiceSum(int[] myDice){
+        List<Integer> diceSum = new ArrayList<>();
+        diceRoll(0,0,myDice,diceSum);
+        return diceSum;
 
-    void comb(int depth,int start, int[][] dice) {
-        if (depth == N / 2) {
-
-            int[] diceA = getDice(true);
-            int[] diceB = getDice(false);
-            int winCnt = rollDice(diceA,diceB,dice);
-
+    }
+    
+    
+    void init(int[][] diceArrs){
+        dices = diceArrs;
+        N = dices.length;
+        
+        
+        A = new int[N/2];
+        B = new int[N/2];
+        answer = new int[N/2];
+    }
+    
+    int[] clone(int[] arr){
+        int[] newArr = new int[N/2];
+        for(int i =0 ; i<N/2; i++){
+            newArr[i] = arr[i]+1; // 0-base -> 1-base
+        }
+        return newArr;
+    }
+    int calculate(){
+        HashSet<Integer> hs = new HashSet<>();
+        for(int idx : A){
+            hs.add(idx);
+        }
+        int diceIdx = 0;
+        for(int i = 0;i < N;i++){
+            if(!hs.contains(i)){
+                B[diceIdx] = i;
+                diceIdx++;
+            }
+        }
+        
+        List<Integer> sumListA = getDiceSum(A);
+        List<Integer> sumListB = getDiceSum(B);
+        
+        Collections.sort(sumListB);
+        
+        int cnt = 0;
+        // System.out.println(sumListB);
+        for(int sumA :sumListA){
+            cnt += getWinCnt(sumListB,sumA);
+        }
+        return cnt;
+        
+    }
+    
+    
+    
+    void process(int depth,int start,int flag){
+        if(depth == N/2){
+            int winCnt = calculate();
             if(winCnt> maxWinCnt){
                 maxWinCnt = winCnt;
-                winDice = diceA;
+                answer = clone(A);
             }
-
+            // System.out.println(Arrays.toString(A));
             return;
         }
-        for (int i = start; i < N; i++) {
-            selected[i] = true;
-            comb(depth + 1, i+1, dice);
-            selected[i] = false;
+        
+        for(int i = start ;i < N;i++){
+            //방문 X
+            if((flag<<i &1) == 0){
+                A[depth] = i;
+                process(depth+1, i+1, flag| i<<1);
+            }
+            
         }
+        
+        
     }
+    
+    
+    
+    public int[] solution(int[][] diceArrs) {
+        // 주사위 최대 6^5
+        // 6000
 
-
-    public int[] solution(int[][] dice) {
-
-        // A가 N/2의 주사위를 가져간다.
-        // B가 N/2의 주사위를 가져간다.
-        init(dice);
-        comb(0,0,dice);
-        return Arrays.stream(winDice).map(n-> n+1).toArray();
+        init(diceArrs);
+        process(0,0,0);
+        
+        
+        
+        return answer;
     }
-
-
 }
